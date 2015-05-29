@@ -13,38 +13,15 @@
 	if (loadedDeviceResult != 0) \
 		return; \
 
-// #pragma comment(linker, "/export:AFCErrnoToAFCError=iTunesMobileDeviceReal.AFCErrnoToAFCError")
-extern "C" int __declspec(dllexport) AFCErrnoToAFCError(int error, char** msg)
-{
-	ENSURE_MOBILEDEVICE_LOADED;
-	OutputDebugStringA("AFCErrnoToAFCError");
-	return method_AFCErrnoToAFCError(error, msg);
-}
-
+//#pragma comment(linker, "/export:AFCErrnoToAFCError=iTunesMobileDeviceReal.AFCErrnoToAFCError")
 #pragma comment(linker, "/export:AFCLockCreate=iTunesMobileDeviceReal.AFCLockCreate")
 #pragma comment(linker, "/export:AFCLockFree=iTunesMobileDeviceReal.AFCLockFree")
 #pragma comment(linker, "/export:AFCLockLock=iTunesMobileDeviceReal.AFCLockLock")
 #pragma comment(linker, "/export:AFCLockTryLock=iTunesMobileDeviceReal.AFCLockTryLock")
 #pragma comment(linker, "/export:AFCLockUnlock=iTunesMobileDeviceReal.AFCLockUnlock")
 #pragma comment(linker, "/export:AFCStringCopy=iTunesMobileDeviceReal.AFCStringCopy")
-
-// #pragma comment(linker, "/export:AMDeviceRelease=iTunesMobileDeviceReal.AMDeviceRelease")
-extern "C" void __declspec(dllexport) AMDeviceRelease(void* device)
-{
-	ENSURE_MOBILEDEVICE_LOADED_VOID;
-	OutputDebugStringA("AMDeviceRelease");
-	method_AMDeviceRelease(device);
-}
-
-
-// #pragma comment(linker, "/export:AMDeviceRetain=iTunesMobileDeviceReal.AMDeviceRetain")
-extern "C" void __declspec(dllexport) AMDeviceRetain(void* device)
-{
-	ENSURE_MOBILEDEVICE_LOADED_VOID;
-	OutputDebugStringA("AMDeviceRetain");
-	method_AMDeviceRetain(device);
-}
-
+//#pragma comment(linker, "/export:AMDeviceRelease=iTunesMobileDeviceReal.AMDeviceRelease")
+//#pragma comment(linker, "/export:AMDeviceRetain=iTunesMobileDeviceReal.AMDeviceRetain")
 #pragma comment(linker, "/export:AMSAddAppleSearchPathsToEnvironmentFromReg=iTunesMobileDeviceReal.AMSAddAppleSearchPathsToEnvironmentFromReg")
 #pragma comment(linker, "/export:MISProfileCopyPayload=iTunesMobileDeviceReal.MISProfileCopyPayload")
 #pragma comment(linker, "/export:MISProfileCopySignerSubjectSummary=iTunesMobileDeviceReal.MISProfileCopySignerSubjectSummary")
@@ -68,7 +45,7 @@ extern "C" void __declspec(dllexport) AMDeviceRetain(void* device)
 #pragma comment(linker, "/export:MISProvisioningProfileProvisionsAllDevices=iTunesMobileDeviceReal.MISProvisioningProfileProvisionsAllDevices")
 #pragma comment(linker, "/export:MISProvisioningProfileValidateSignature=iTunesMobileDeviceReal.MISProvisioningProfileValidateSignature")
 #pragma comment(linker, "/export:USBMuxListenForDevices=iTunesMobileDeviceReal.USBMuxListenForDevices")
-#pragma comment(linker, "/export:AFCConnectionClose=iTunesMobileDeviceReal.AFCConnectionClose")
+//#pragma comment(linker, "/export:AFCConnectionClose=iTunesMobileDeviceReal.AFCConnectionClose")
 #pragma comment(linker, "/export:AFCConnectionCopyLastErrorInfo=iTunesMobileDeviceReal.AFCConnectionCopyLastErrorInfo")
 #pragma comment(linker, "/export:AFCConnectionCreate=iTunesMobileDeviceReal.AFCConnectionCreate")
 #pragma comment(linker, "/export:AFCConnectionGetContext=iTunesMobileDeviceReal.AFCConnectionGetContext")
@@ -208,15 +185,7 @@ extern "C" void __declspec(dllexport) AMDeviceRetain(void* device)
 #pragma comment(linker, "/export:AMDeviceActivate=iTunesMobileDeviceReal.AMDeviceActivate")
 #pragma comment(linker, "/export:AMDeviceArchiveApplication=iTunesMobileDeviceReal.AMDeviceArchiveApplication")
 #pragma comment(linker, "/export:AMDeviceCheckCapabilitiesMatch=iTunesMobileDeviceReal.AMDeviceCheckCapabilitiesMatch")
-
 //#pragma comment(linker, "/export:AMDeviceConnect=iTunesMobileDeviceReal.AMDeviceConnect")
-extern "C" mach_error_t __declspec(dllexport) AMDeviceConnect(void* device)
-{
-	ENSURE_MOBILEDEVICE_LOADED;
-	OutputDebugStringA("AMDeviceConnect");
-	return method_AMDeviceConnect(device);
-}
-
 #pragma comment(linker, "/export:AMDeviceCopyAuthInstallPreflightOptions=iTunesMobileDeviceReal.AMDeviceCopyAuthInstallPreflightOptions")
 #pragma comment(linker, "/export:AMDeviceCopyDeviceIdentifier=iTunesMobileDeviceReal.AMDeviceCopyDeviceIdentifier")
 #pragma comment(linker, "/export:AMDeviceCopyDeviceLocation=iTunesMobileDeviceReal.AMDeviceCopyDeviceLocation")
@@ -268,25 +237,17 @@ extern "C" mach_error_t __declspec(dllexport) AMDeviceConnect(void* device)
 #pragma comment(linker, "/export:AMDeviceSetUserInfo=iTunesMobileDeviceReal.AMDeviceSetUserInfo")
 #pragma comment(linker, "/export:AMDeviceSetValue=iTunesMobileDeviceReal.AMDeviceSetValue")
 #pragma comment(linker, "/export:AMDeviceSetWirelessBuddyFlags=iTunesMobileDeviceReal.AMDeviceSetWirelessBuddyFlags")
-
 //#pragma comment(linker, "/export:AMDeviceStartHouseArrestService=iTunesMobileDeviceReal.AMDeviceStartHouseArrestService")
-extern "C" mach_error_t __declspec(dllexport) AMDeviceStartHouseArrestService(void* *device, void* identifier, void *unknown, void* handle, unsigned int *what)
-{
-	ENSURE_MOBILEDEVICE_LOADED;
-	OutputDebugStringA("AMDeviceStartHouseArrestService");
-	return method_AMDeviceStartHouseArrestService(device, identifier, unknown, handle, what);
-}
-
-#pragma comment(linker, "/export:AMDeviceStartService=iTunesMobileDeviceReal.AMDeviceStartService")
-#pragma comment(linker, "/export:AMDeviceStartServiceWithOptions=iTunesMobileDeviceReal.AMDeviceStartServiceWithOptions")
-#pragma comment(linker, "/export:AMDeviceStartSession=iTunesMobileDeviceReal.AMDeviceStartSession")
-#pragma comment(linker, "/export:AMDeviceStopSession=iTunesMobileDeviceReal.AMDeviceStopSession")
-#pragma comment(linker, "/export:AMDeviceTransferApplication=iTunesMobileDeviceReal.AMDeviceTransferApplication")
-#pragma comment(linker, "/export:AMDeviceTransferPath=iTunesMobileDeviceReal.AMDeviceTransferPath")
-#pragma comment(linker, "/export:AMDeviceUninstallApplication=iTunesMobileDeviceReal.AMDeviceUninstallApplication")
-#pragma comment(linker, "/export:AMDeviceUnpair=iTunesMobileDeviceReal.AMDeviceUnpair")
-#pragma comment(linker, "/export:AMDeviceUpgradeApplication=iTunesMobileDeviceReal.AMDeviceUpgradeApplication")
-#pragma comment(linker, "/export:AMDeviceValidatePairing=iTunesMobileDeviceReal.AMDeviceValidatePairing")
+//#pragma comment(linker, "/export:AMDeviceStartService=iTunesMobileDeviceReal.AMDeviceStartService")
+//#pragma comment(linker, "/export:AMDeviceStartServiceWithOptions=iTunesMobileDeviceReal.AMDeviceStartServiceWithOptions")
+//#pragma comment(linker, "/export:AMDeviceStartSession=iTunesMobileDeviceReal.AMDeviceStartSession")
+//#pragma comment(linker, "/export:AMDeviceStopSession=iTunesMobileDeviceReal.AMDeviceStopSession")
+//#pragma comment(linker, "/export:AMDeviceTransferApplication=iTunesMobileDeviceReal.AMDeviceTransferApplication")
+//#pragma comment(linker, "/export:AMDeviceTransferPath=iTunesMobileDeviceReal.AMDeviceTransferPath")
+//#pragma comment(linker, "/export:AMDeviceUninstallApplication=iTunesMobileDeviceReal.AMDeviceUninstallApplication")
+//#pragma comment(linker, "/export:AMDeviceUnpair=iTunesMobileDeviceReal.AMDeviceUnpair")
+//#pragma comment(linker, "/export:AMDeviceUpgradeApplication=iTunesMobileDeviceReal.AMDeviceUpgradeApplication")
+//#pragma comment(linker, "/export:AMDeviceValidatePairing=iTunesMobileDeviceReal.AMDeviceValidatePairing")
 #pragma comment(linker, "/export:AMDeviceWakeupOperationCreateWithToken=iTunesMobileDeviceReal.AMDeviceWakeupOperationCreateWithToken")
 #pragma comment(linker, "/export:AMDeviceWakeupOperationGetTypeID=iTunesMobileDeviceReal.AMDeviceWakeupOperationGetTypeID")
 #pragma comment(linker, "/export:AMDeviceWakeupOperationInvalidate=iTunesMobileDeviceReal.AMDeviceWakeupOperationInvalidate")
@@ -478,3 +439,108 @@ extern "C" mach_error_t __declspec(dllexport) AMDeviceStartHouseArrestService(vo
 #pragma comment(linker, "/export:kAFCHeaderKeySignature=iTunesMobileDeviceReal.kAFCHeaderKeySignature")
 #pragma comment(linker, "/export:kAMRestorableInvalidClientID=iTunesMobileDeviceReal.kAMRestorableInvalidClientID")
 
+extern "C" int __declspec(dllexport) AFCErrnoToAFCError(int err, char **msg)
+{
+	ENSURE_MOBILEDEVICE_LOADED;
+	OutputDebugStringA("AFCErrnoToAFCError");
+	return method_AFCErrnoToAFCError(err, msg);
+
+}
+extern "C" void __declspec(dllexport) AMDeviceRelease(void* device)
+{
+	ENSURE_MOBILEDEVICE_LOADED_VOID;
+	OutputDebugStringA("AMDeviceRelease");
+	method_AMDeviceRelease(device);
+
+}
+extern "C" void __declspec(dllexport) AMDeviceRetain(void* device)
+{
+	ENSURE_MOBILEDEVICE_LOADED_VOID;
+	OutputDebugStringA("AMDeviceRetain");
+	method_AMDeviceRetain(device);
+
+}
+extern "C" mach_error_t __declspec(dllexport) AFCConnectionClose(void* conn)
+{
+	ENSURE_MOBILEDEVICE_LOADED;
+	OutputDebugStringA("AFCConnectionClose");
+	return method_AFCConnectionClose(conn);
+
+}
+extern "C" mach_error_t __declspec(dllexport) AMDeviceConnect(void* device)
+{
+	ENSURE_MOBILEDEVICE_LOADED;
+	OutputDebugStringA("AMDeviceConnect");
+	return method_AMDeviceConnect(device);
+
+}
+extern "C" mach_error_t __declspec(dllexport) AMDeviceStartHouseArrestService(void* *device, void* identifier, void *unknown, void* handle, unsigned int *what)
+{
+	ENSURE_MOBILEDEVICE_LOADED;
+	OutputDebugStringA("AMDeviceStartHouseArrestService");
+	return method_AMDeviceStartHouseArrestService(device, identifier, unknown, handle, what);
+
+}
+extern "C" mach_error_t __declspec(dllexport) AMDeviceStartService(void* device, void* service_name, int* socket_fd)
+{
+	ENSURE_MOBILEDEVICE_LOADED;
+	OutputDebugStringA("AMDeviceStartService");
+	return method_AMDeviceStartService(device, service_name, socket_fd);
+
+}
+extern "C" mach_error_t __declspec(dllexport) AMDeviceStartServiceWithOptions(void* device, void* service_name, void* options, int* socket)
+{
+	ENSURE_MOBILEDEVICE_LOADED;
+	OutputDebugStringA("AMDeviceStartServiceWithOptions");
+	return method_AMDeviceStartServiceWithOptions(device, service_name, options, socket);
+
+}
+extern "C" mach_error_t __declspec(dllexport) AMDeviceStartSession(void* device)
+{
+	ENSURE_MOBILEDEVICE_LOADED;
+	OutputDebugStringA("AMDeviceStartSession");
+	return method_AMDeviceStartSession(device);
+
+}
+extern "C" mach_error_t __declspec(dllexport) AMDeviceStopSession(void* device)
+{
+	ENSURE_MOBILEDEVICE_LOADED;
+	OutputDebugStringA("AMDeviceStopSession");
+	return method_AMDeviceStopSession(device);
+
+}
+extern "C" int __declspec(dllexport) AMDeviceTransferApplication(int socket_fd, void* path, void* options, void *callback, int callback_arg)
+{
+	ENSURE_MOBILEDEVICE_LOADED;
+	OutputDebugStringA("AMDeviceTransferApplication");
+	return method_AMDeviceTransferApplication(socket_fd, path, options, callback, callback_arg);
+
+}
+extern "C" int __declspec(dllexport) AMDeviceTransferPath(int unknown0, void *device, void* url, void* options, void *callback, int callback_arg)
+{
+	ENSURE_MOBILEDEVICE_LOADED;
+	OutputDebugStringA("AMDeviceTransferPath");
+	return method_AMDeviceTransferPath(unknown0, device, url, options, callback, callback_arg);
+
+}
+extern "C" int __declspec(dllexport) AMDeviceUninstallApplication(int installFd, void* bundleId, void* options, void* callback, void *callback_arg)
+{
+	ENSURE_MOBILEDEVICE_LOADED;
+	OutputDebugStringA("AMDeviceUninstallApplication");
+	return method_AMDeviceUninstallApplication(installFd, bundleId, options, callback, callback_arg);
+
+}
+extern "C" mach_error_t __declspec(dllexport) AMDeviceUnpair(void* device)
+{
+	ENSURE_MOBILEDEVICE_LOADED;
+	OutputDebugStringA("AMDeviceUnpair");
+	return method_AMDeviceUnpair(device);
+
+}
+extern "C" mach_error_t __declspec(dllexport) AMDeviceUpgradeApplication(int unknown1, void* path, void* options, void* unknown2)
+{
+	ENSURE_MOBILEDEVICE_LOADED;
+	OutputDebugStringA("AMDeviceUpgradeApplication");
+	return method_AMDeviceUpgradeApplication(unknown1, path, options, unknown2);
+
+}
