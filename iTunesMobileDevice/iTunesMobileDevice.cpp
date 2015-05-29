@@ -9,7 +9,14 @@
 	if (loadedDeviceResult != 0) \
 		return loadedDeviceResult; \
 
-#pragma comment(linker, "/export:AFCErrnoToAFCError=iTunesMobileDeviceReal.AFCErrnoToAFCError")
+// #pragma comment(linker, "/export:AFCErrnoToAFCError=iTunesMobileDeviceReal.AFCErrnoToAFCError")
+extern "C" int __declspec(dllexport) AFCErrnoToAFCError(int error, char** msg)
+{
+	ENSURE_MOBILEDEVICE_LOADED;
+	OutputDebugStringA("AFCErrnoToAFCError");
+	return method_AFCErrnoToAFCError(error, msg);
+}
+
 #pragma comment(linker, "/export:AFCLockCreate=iTunesMobileDeviceReal.AFCLockCreate")
 #pragma comment(linker, "/export:AFCLockFree=iTunesMobileDeviceReal.AFCLockFree")
 #pragma comment(linker, "/export:AFCLockLock=iTunesMobileDeviceReal.AFCLockLock")

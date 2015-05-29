@@ -3,6 +3,11 @@
 
 typedef unsigned int mach_error_t;
 
+typedef int(*tf_AFCErrnoToAFCError)(
+	int err,
+	char **msg
+	);
+
 typedef mach_error_t(*tf_AMDeviceConnect)(
 	void* device
 	);
@@ -16,6 +21,7 @@ typedef mach_error_t(*tf_AMDeviceStartHouseArrestService)(
 	);
 
 static HINSTANCE MobileDeviceDllHandle = NULL;
+static tf_AFCErrnoToAFCError method_AFCErrnoToAFCError = NULL;
 static tf_AMDeviceConnect method_AMDeviceConnect = NULL;
 static tf_AMDeviceStartHouseArrestService method_AMDeviceStartHouseArrestService = NULL;
 
@@ -41,6 +47,7 @@ static mach_error_t LoadReadMobileDeviceLibrary()
 		return -1;
 	}
 
+	GET_METHOD_PROC_ADDR(AFCErrnoToAFCError);
 	GET_METHOD_PROC_ADDR(AMDeviceConnect);
 	GET_METHOD_PROC_ADDR(AMDeviceStartHouseArrestService);
 
