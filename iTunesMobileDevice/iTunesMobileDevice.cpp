@@ -3,7 +3,11 @@
 
 #include "stdafx.h"
 
-typedef unsigned int mach_error_t;
+#include "iTunesMobileDeviceLib.h"
+
+#define ENSURE_MOBILEDEVICE_LOADED int loadedDeviceResult = LoadReadMobileDeviceLibrary(); \
+	if (loadedDeviceResult != 0) \
+		return loadedDeviceResult; \
 
 #pragma comment(linker, "/export:AFCErrnoToAFCError=iTunesMobileDeviceReal.AFCErrnoToAFCError")
 #pragma comment(linker, "/export:AFCLockCreate=iTunesMobileDeviceReal.AFCLockCreate")
@@ -177,44 +181,13 @@ typedef unsigned int mach_error_t;
 #pragma comment(linker, "/export:AMDeviceActivate=iTunesMobileDeviceReal.AMDeviceActivate")
 #pragma comment(linker, "/export:AMDeviceArchiveApplication=iTunesMobileDeviceReal.AMDeviceArchiveApplication")
 #pragma comment(linker, "/export:AMDeviceCheckCapabilitiesMatch=iTunesMobileDeviceReal.AMDeviceCheckCapabilitiesMatch")
+
 //#pragma comment(linker, "/export:AMDeviceConnect=iTunesMobileDeviceReal.AMDeviceConnect")
-
-typedef mach_error_t(*tf_AMDeviceConnect)(
-	void* device
-);
-
 extern "C" mach_error_t __declspec(dllexport) AMDeviceConnect(void* device)
 {
-	while (!IsDebuggerPresent())
-		Sleep(1000);
-
-	DebugBreak();
-
-	HINSTANCE dllHandle;
-	tf_AMDeviceConnect function;
-	DWORD retaddr;
-
-	OutputDebugStringA("AMDeviceConnect!!!");
-
-	MessageBoxA(NULL, "Failed to load GetProcessDefaultLayout!", "Error", MB_OK | MB_ICONERROR);
-
-	dllHandle = LoadLibraryA("iTunesMobileDeviceReal.dll");
-	if (!dllHandle)
-	{
-		MessageBoxA(NULL, "Failed to load user33.dll!", "Error", MB_OK | MB_ICONERROR);
-		ExitProcess(0);
-	}
-
-	function = (tf_AMDeviceConnect)GetProcAddress(dllHandle, "AMDeviceConnect");
-	if (!function)
-	{
-		MessageBoxA(NULL, "Failed to load GetProcessDefaultLayout!", "Error", MB_OK | MB_ICONERROR);
-		ExitProcess(0);
-	}
-
-	MessageBoxA(NULL, "AMDeviceConnect called!", "Hooked!", MB_OK);
-
-	return function(device);
+	ENSURE_MOBILEDEVICE_LOADED;
+	OutputDebugStringA("AMDeviceConnect");
+	return method_AMDeviceConnect(device);
 }
 
 #pragma comment(linker, "/export:AMDeviceCopyAuthInstallPreflightOptions=iTunesMobileDeviceReal.AMDeviceCopyAuthInstallPreflightOptions")
@@ -268,43 +241,13 @@ extern "C" mach_error_t __declspec(dllexport) AMDeviceConnect(void* device)
 #pragma comment(linker, "/export:AMDeviceSetUserInfo=iTunesMobileDeviceReal.AMDeviceSetUserInfo")
 #pragma comment(linker, "/export:AMDeviceSetValue=iTunesMobileDeviceReal.AMDeviceSetValue")
 #pragma comment(linker, "/export:AMDeviceSetWirelessBuddyFlags=iTunesMobileDeviceReal.AMDeviceSetWirelessBuddyFlags")
+
 //#pragma comment(linker, "/export:AMDeviceStartHouseArrestService=iTunesMobileDeviceReal.AMDeviceStartHouseArrestService")
-
-typedef mach_error_t(*tf_AMDeviceStartHouseArrestService)(
-	void* *device, 
-	void* identifier, 
-	void *unknown, 
-	void* handle, 
-	unsigned int *what
-);
-
 extern "C" mach_error_t __declspec(dllexport) AMDeviceStartHouseArrestService(void* *device, void* identifier, void *unknown, void* handle, unsigned int *what)
 {
-	HINSTANCE dllHandle;
-	tf_AMDeviceStartHouseArrestService function;
-	DWORD retaddr;
-
-	OutputDebugStringA("This is a test!!!");
-
-	MessageBoxA(NULL, "Failed to load GetProcessDefaultLayout!", "Error", MB_OK | MB_ICONERROR);
-
-	dllHandle = LoadLibraryA("iTunesMobileDeviceReal.dll");
-	if (!dllHandle)
-	{
-		MessageBoxA(NULL, "Failed to load user33.dll!", "Error", MB_OK | MB_ICONERROR);
-		ExitProcess(0);
-	}
-
-	function = (tf_AMDeviceStartHouseArrestService)GetProcAddress(dllHandle, "AMDeviceStartHouseArrestService");
-	if (!function)
-	{
-		MessageBoxA(NULL, "Failed to load GetProcessDefaultLayout!", "Error", MB_OK | MB_ICONERROR);
-		ExitProcess(0);
-	}
-
-	MessageBoxA(NULL, "AMDeviceStartHouseArrestService called!", "Hooked!", MB_OK);
-
-	return function(device, identifier, unknown, handle, what);
+	ENSURE_MOBILEDEVICE_LOADED;
+	OutputDebugStringA("AMDeviceStartHouseArrestService");
+	return method_AMDeviceStartHouseArrestService(device, identifier, unknown, handle, what);
 }
 
 #pragma comment(linker, "/export:AMDeviceStartService=iTunesMobileDeviceReal.AMDeviceStartService")
