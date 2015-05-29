@@ -1,10 +1,14 @@
-﻿using System;
+﻿#define MOCK_METHODS
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting;
 using System.Security.Permissions;
 using System.Text;
 using System.Windows.Forms;
+
+
 
 namespace GenerateStubs
 {
@@ -27,10 +31,21 @@ namespace GenerateStubs
         [STAThread]
         static void Main(string[] args)
         {
+#if MOCK_METHODS
+            foreach (var method in Methods.Split(new string[] { Environment.NewLine }, StringSplitOptions.None))
+            {
+                if (!MethodSignatures.Any(x => x.MethodName == method))
+                {
+                    MethodSignatures.Add(new MethodSig(method, "mach_error_t"));
+                }
+            }
+#endif
+
             var sb = new StringBuilder();
             foreach (var method in Methods.Split(new string[] {Environment.NewLine}, StringSplitOptions.None))
             {
-                sb.AppendLine(string.Format("#pragma comment(linker, \"/export:{0}=iTunesMobileDeviceReal.{0}\")", method));
+                var commented = MethodSignatures.Any(x => x.MethodName == method);
+                sb.AppendLine(string.Format((commented ? "// " : "") + "#pragma comment(linker, \"/export:{0}=iTunesMobileDeviceReal.{0}\")", method));
             }
 
             Clipboard.SetText(sb.ToString());
@@ -72,9 +87,7 @@ namespace GenerateStubs
             {
                 sb.AppendLine(string.Format("extern \"C\" {0} __declspec(dllexport) {1}({2})", method.ReturnType, method.MethodName, string.Join(", ", method.Params)));
                 sb.AppendLine("{");
-                sb.AppendLine(method.ReturnType == "void"
-                    ? "		ENSURE_MOBILEDEVICE_LOADED_VOID;"
-                    : "		ENSURE_MOBILEDEVICE_LOADED;");
+                sb.AppendLine("		ENSURE_MOBILEDEVICE_LOADED;");
                 sb.AppendLine(string.Format("     OutputDebugStringA(\"{0}\");", method.MethodName));
 
                 var methodInvoke = string.Format("method_{0}({1})", method.MethodName,
@@ -110,9 +123,6 @@ namespace GenerateStubs
             //#pragma comment(linker, "/export:AFCLockLock=iTunesMobileDeviceReal.AFCLockLock")
             //#pragma comment(linker, "/export:AFCLockTryLock=iTunesMobileDeviceReal.AFCLockTryLock")
             //#pragma comment(linker, "/export:AFCLockUnlock=iTunesMobileDeviceReal.AFCLockUnlock")
-            //#pragma comment(linker, "/export:? AFCLog@@YAXHPEBDZZ=iTunesMobileDeviceReal.? AFCLog@@YAXHPEBDZZ")
-            //#pragma comment(linker, "/export:? AFCPlatformInitialize@@YAXXZ=iTunesMobileDeviceReal.? AFCPlatformInitialize@@YAXXZ")
-            //#pragma comment(linker, "/export:? AFCSetLogLevel@@YAXH@Z=iTunesMobileDeviceReal.? AFCSetLogLevel@@YAXH@Z")
             //#pragma comment(linker, "/export:AFCStringCopy=iTunesMobileDeviceReal.AFCStringCopy")
             //#pragma comment(linker, "/export:AMDeviceRelease=iTunesMobileDeviceReal.AMDeviceRelease")
              new MethodSig("AMDeviceRelease", "void", "void* device"),
@@ -155,6 +165,7 @@ namespace GenerateStubs
             //#pragma comment(linker, "/export:AFCConnectionInvalidate=iTunesMobileDeviceReal.AFCConnectionInvalidate")
             //#pragma comment(linker, "/export:AFCConnectionIsValid=iTunesMobileDeviceReal.AFCConnectionIsValid")
             //#pragma comment(linker, "/export:AFCConnectionOpen=iTunesMobileDeviceReal.AFCConnectionOpen")
+            new MethodSig("AFCConnectionOpen", "afc_error_t", "void* handle", "unsigned int io_timeout", "void* conn"),
             //#pragma comment(linker, "/export:AFCConnectionProcessOperation=iTunesMobileDeviceReal.AFCConnectionProcessOperation")
             //#pragma comment(linker, "/export:AFCConnectionProcessOperations=iTunesMobileDeviceReal.AFCConnectionProcessOperations")
             //#pragma comment(linker, "/export:AFCConnectionScheduleWithRunLoop=iTunesMobileDeviceReal.AFCConnectionScheduleWithRunLoop")
@@ -173,6 +184,7 @@ namespace GenerateStubs
             //#pragma comment(linker, "/export:AFCDeviceInfoOpen=iTunesMobileDeviceReal.AFCDeviceInfoOpen")
             //#pragma comment(linker, "/export:AFCDirectoryClose=iTunesMobileDeviceReal.AFCDirectoryClose")
             //#pragma comment(linker, "/export:AFCDirectoryCreate=iTunesMobileDeviceReal.AFCDirectoryCreate")
+            new MethodSig("AFCDirectoryCreate", "afc_error_t", "void* conn", "const char *dirname"),
             //#pragma comment(linker, "/export:AFCDirectoryOpen=iTunesMobileDeviceReal.AFCDirectoryOpen")
             //#pragma comment(linker, "/export:AFCDirectoryRead=iTunesMobileDeviceReal.AFCDirectoryRead")
             //#pragma comment(linker, "/export:AFCDiscardBodyData=iTunesMobileDeviceReal.AFCDiscardBodyData")
@@ -192,19 +204,28 @@ namespace GenerateStubs
             //#pragma comment(linker, "/export:AFCFileDescriptorInvalidate=iTunesMobileDeviceReal.AFCFileDescriptorInvalidate")
             //#pragma comment(linker, "/export:AFCFileDescriptorIsValid=iTunesMobileDeviceReal.AFCFileDescriptorIsValid")
             //#pragma comment(linker, "/export:AFCFileInfoOpen=iTunesMobileDeviceReal.AFCFileInfoOpen")
+            new MethodSig("AFCFileInfoOpen", "afc_error_t", "void *conn", "const char *path", "void *info"),
             //#pragma comment(linker, "/export:AFCFileRefClose=iTunesMobileDeviceReal.AFCFileRefClose")
+            new MethodSig("AFCFileRefClose", "int", "void* hAFC", "INT64 handle"),
             //#pragma comment(linker, "/export:AFCFileRefLock=iTunesMobileDeviceReal.AFCFileRefLock")
             //#pragma comment(linker, "/export:AFCFileRefOpen=iTunesMobileDeviceReal.AFCFileRefOpen")
+            new MethodSig("AFCFileRefOpen", "afc_error_t", "void* conn", "const char *path", "unsigned long long mode", "void *ref"),
             //#pragma comment(linker, "/export:AFCFileRefRead=iTunesMobileDeviceReal.AFCFileRefRead")
+            new MethodSig("AFCFileRefRead", "int", "void* hAFC", "INT64 handle", "void *buffer", "UINT32 *len"),
             //#pragma comment(linker, "/export:AFCFileRefSeek=iTunesMobileDeviceReal.AFCFileRefSeek")
+            new MethodSig("AFCFileRefSeek", "afc_error_t", "void* conn", "void* ref", "unsigned long long offset1", "unsigned long long offset2"),
             //#pragma comment(linker, "/export:AFCFileRefSetFileSize=iTunesMobileDeviceReal.AFCFileRefSetFileSize")
             //#pragma comment(linker, "/export:AFCFileRefTell=iTunesMobileDeviceReal.AFCFileRefTell")
+            new MethodSig("AFCFileRefTell", "int", "void* hAFC", "INT64 handle", "long *position"),
             //#pragma comment(linker, "/export:AFCFileRefUnlock=iTunesMobileDeviceReal.AFCFileRefUnlock")
             //#pragma comment(linker, "/export:AFCFileRefWrite=iTunesMobileDeviceReal.AFCFileRefWrite")
             //#pragma comment(linker, "/export:AFCFlushData=iTunesMobileDeviceReal.AFCFlushData")
+            new MethodSig("AFCFlushData", "int", "void* hAFC", "INT64 handle"),
             //#pragma comment(linker, "/export:AFCGetClientVersionString=iTunesMobileDeviceReal.AFCGetClientVersionString")
             //#pragma comment(linker, "/export:AFCKeyValueClose=iTunesMobileDeviceReal.AFCKeyValueClose")
+            new MethodSig("AFCKeyValueClose", "int", "void* val"),
             //#pragma comment(linker, "/export:AFCKeyValueRead=iTunesMobileDeviceReal.AFCKeyValueRead")
+            new MethodSig("AFCKeyValueRead", "int", "void *data", "void* key", "void* val"),
             //#pragma comment(linker, "/export:AFCLinkPath=iTunesMobileDeviceReal.AFCLinkPath")
             //#pragma comment(linker, "/export:AFCOperationCopyPacketData=iTunesMobileDeviceReal.AFCOperationCopyPacketData")
             //#pragma comment(linker, "/export:AFCOperationCreateGetConnectionInfo=iTunesMobileDeviceReal.AFCOperationCreateGetConnectionInfo")
@@ -286,29 +307,39 @@ namespace GenerateStubs
             new MethodSig("AMDeviceConnect", "mach_error_t", "void* device"),
             //#pragma comment(linker, "/export:AMDeviceCopyAuthInstallPreflightOptions=iTunesMobileDeviceReal.AMDeviceCopyAuthInstallPreflightOptions")
             //#pragma comment(linker, "/export:AMDeviceCopyDeviceIdentifier=iTunesMobileDeviceReal.AMDeviceCopyDeviceIdentifier")
+            new MethodSig("AMDeviceCopyDeviceIdentifier", "int", "void* device"), // TODO: Return type is CStringRef
             //#pragma comment(linker, "/export:AMDeviceCopyDeviceLocation=iTunesMobileDeviceReal.AMDeviceCopyDeviceLocation")
             //#pragma comment(linker, "/export:AMDeviceCopyProvisioningProfiles=iTunesMobileDeviceReal.AMDeviceCopyProvisioningProfiles")
             //#pragma comment(linker, "/export:AMDeviceCopyValue=iTunesMobileDeviceReal.AMDeviceCopyValue")
+            new MethodSig("AMDeviceCopyValue", "int", "void* device", "unsigned int unknown", "void* cfString"), // TODO: Return type is CStringRef
             //#pragma comment(linker, "/export:AMDeviceCopyValueWithError=iTunesMobileDeviceReal.AMDeviceCopyValueWithError")
             //#pragma comment(linker, "/export:AMDeviceCreateHouseArrestService=iTunesMobileDeviceReal.AMDeviceCreateHouseArrestService")
+            new MethodSig("AMDeviceCreateHouseArrestService", "int", "void* unknown1"),
             //#pragma comment(linker, "/export:AMDeviceCreateWakeupToken=iTunesMobileDeviceReal.AMDeviceCreateWakeupToken")
+            new MethodSig("AMDeviceCreateWakeupToken", "int", "void* device"),
             //#pragma comment(linker, "/export:AMDeviceDeactivate=iTunesMobileDeviceReal.AMDeviceDeactivate")
             //#pragma comment(linker, "/export:AMDeviceDisconnect=iTunesMobileDeviceReal.AMDeviceDisconnect")
+            new MethodSig("AMDeviceDisconnect", "mach_error_t", "void* device"),
             //#pragma comment(linker, "/export:AMDeviceEnterRecovery=iTunesMobileDeviceReal.AMDeviceEnterRecovery")
             //#pragma comment(linker, "/export:AMDeviceExtendedPairWithOptions=iTunesMobileDeviceReal.AMDeviceExtendedPairWithOptions")
             //#pragma comment(linker, "/export:AMDeviceGetConnectionID=iTunesMobileDeviceReal.AMDeviceGetConnectionID")
+            new MethodSig("AMDeviceGetConnectionID", "mach_error_t", "void* device"),
             //#pragma comment(linker, "/export:AMDeviceGetInterfaceSpeed=iTunesMobileDeviceReal.AMDeviceGetInterfaceSpeed")
             //#pragma comment(linker, "/export:AMDeviceGetInterfaceType=iTunesMobileDeviceReal.AMDeviceGetInterfaceType")
+            new MethodSig("AMDeviceGetInterfaceType", "UINT32", "void* device"),
             //#pragma comment(linker, "/export:AMDeviceGetTypeID=iTunesMobileDeviceReal.AMDeviceGetTypeID")
             //#pragma comment(linker, "/export:AMDeviceGetUserInfo=iTunesMobileDeviceReal.AMDeviceGetUserInfo")
             //#pragma comment(linker, "/export:AMDeviceGetWirelessBuddyFlags=iTunesMobileDeviceReal.AMDeviceGetWirelessBuddyFlags")
             //#pragma comment(linker, "/export:AMDeviceInstallApplication=iTunesMobileDeviceReal.AMDeviceInstallApplication")
             //#pragma comment(linker, "/export:AMDeviceInstallProvisioningProfile=iTunesMobileDeviceReal.AMDeviceInstallProvisioningProfile")
             //#pragma comment(linker, "/export:AMDeviceIsPaired=iTunesMobileDeviceReal.AMDeviceIsPaired")
+            new MethodSig("AMDeviceIsPaired", "int","void* device"),
             //#pragma comment(linker, "/export:AMDeviceIsValid=iTunesMobileDeviceReal.AMDeviceIsValid")
             //#pragma comment(linker, "/export:AMDeviceLookupApplicationArchives=iTunesMobileDeviceReal.AMDeviceLookupApplicationArchives")
             //#pragma comment(linker, "/export:AMDeviceLookupApplications=iTunesMobileDeviceReal.AMDeviceLookupApplications")
+            new MethodSig("AMDeviceLookupApplications", "int", "void* device", "int zero", "void* result"),
             //#pragma comment(linker, "/export:AMDeviceNotificationSubscribe=iTunesMobileDeviceReal.AMDeviceNotificationSubscribe")
+            new MethodSig("AMDeviceNotificationSubscribe", "mach_error_t", "void* callback", "void* unused1", "void* unused2", "void* unused3", " void* am_device_notification_ptr"),
             //#pragma comment(linker, "/export:AMDeviceNotificationUnsubscribe=iTunesMobileDeviceReal.AMDeviceNotificationUnsubscribe")
             //#pragma comment(linker, "/export:AMDevicePair=iTunesMobileDeviceReal.AMDevicePair")
             //#pragma comment(linker, "/export:AMDevicePairWithOptions=iTunesMobileDeviceReal.AMDevicePairWithOptions")
@@ -555,9 +586,6 @@ AFCLockFree
 AFCLockLock
 AFCLockTryLock
 AFCLockUnlock
-? AFCLog@@YAXHPEBDZZ
-? AFCPlatformInitialize@@YAXXZ
-? AFCSetLogLevel@@YAXH@Z
 AFCStringCopy
 AMDeviceRelease
 AMDeviceRetain
