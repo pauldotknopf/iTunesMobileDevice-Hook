@@ -9,6 +9,10 @@
 	if (loadedDeviceResult != 0) \
 		return loadedDeviceResult; \
 
+#define ENSURE_MOBILEDEVICE_LOADED_VOID int loadedDeviceResult = LoadReadMobileDeviceLibrary(); \
+	if (loadedDeviceResult != 0) \
+		return; \
+
 // #pragma comment(linker, "/export:AFCErrnoToAFCError=iTunesMobileDeviceReal.AFCErrnoToAFCError")
 extern "C" int __declspec(dllexport) AFCErrnoToAFCError(int error, char** msg)
 {
@@ -23,8 +27,24 @@ extern "C" int __declspec(dllexport) AFCErrnoToAFCError(int error, char** msg)
 #pragma comment(linker, "/export:AFCLockTryLock=iTunesMobileDeviceReal.AFCLockTryLock")
 #pragma comment(linker, "/export:AFCLockUnlock=iTunesMobileDeviceReal.AFCLockUnlock")
 #pragma comment(linker, "/export:AFCStringCopy=iTunesMobileDeviceReal.AFCStringCopy")
-#pragma comment(linker, "/export:AMDeviceRelease=iTunesMobileDeviceReal.AMDeviceRelease")
-#pragma comment(linker, "/export:AMDeviceRetain=iTunesMobileDeviceReal.AMDeviceRetain")
+
+// #pragma comment(linker, "/export:AMDeviceRelease=iTunesMobileDeviceReal.AMDeviceRelease")
+extern "C" void __declspec(dllexport) AMDeviceRelease(void* device)
+{
+	ENSURE_MOBILEDEVICE_LOADED_VOID;
+	OutputDebugStringA("AMDeviceRelease");
+	method_AMDeviceRelease(device);
+}
+
+
+// #pragma comment(linker, "/export:AMDeviceRetain=iTunesMobileDeviceReal.AMDeviceRetain")
+extern "C" void __declspec(dllexport) AMDeviceRetain(void* device)
+{
+	ENSURE_MOBILEDEVICE_LOADED_VOID;
+	OutputDebugStringA("AMDeviceRetain");
+	method_AMDeviceRetain(device);
+}
+
 #pragma comment(linker, "/export:AMSAddAppleSearchPathsToEnvironmentFromReg=iTunesMobileDeviceReal.AMSAddAppleSearchPathsToEnvironmentFromReg")
 #pragma comment(linker, "/export:MISProfileCopyPayload=iTunesMobileDeviceReal.MISProfileCopyPayload")
 #pragma comment(linker, "/export:MISProfileCopySignerSubjectSummary=iTunesMobileDeviceReal.MISProfileCopySignerSubjectSummary")
