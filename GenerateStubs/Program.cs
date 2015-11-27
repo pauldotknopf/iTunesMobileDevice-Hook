@@ -89,6 +89,9 @@ namespace GenerateStubs
                 sb.AppendLine("{");
                 sb.AppendLine("		ENSURE_MOBILEDEVICE_LOADED;");
                 sb.AppendLine(string.Format("     OutputDebugStringA(\"{0}\");", method.MethodName));
+                //sb.AppendLine(string.Format("     MessageBoxA(NULL, \"{0}\", \"iTMDHook\", MB_OK | MB_ICONINFORMATION);", method.MethodName));
+                //sb.AppendLine(string.Format("     std::ofstream log(\"D:\\itmdlog.txt\", std::ios_base::app | std::ios_base::out);"));
+                //sb.AppendLine(string.Format("     log << \"{0}\\n\";", method.MethodName));
 
                 var methodInvoke = string.Format("method_{0}({1})", method.MethodName,
                     string.Join(", ", method.Params.Select(x => x.Substring(x.LastIndexOf(" ", StringComparison.Ordinal)).Replace("*", ""))));
@@ -314,7 +317,7 @@ namespace GenerateStubs
             new MethodSig("AMDeviceCopyValue", "int", "void* device", "unsigned int unknown", "void* cfString"), // TODO: Return type is CStringRef
             //#pragma comment(linker, "/export:AMDeviceCopyValueWithError=iTunesMobileDeviceReal.AMDeviceCopyValueWithError")
             //#pragma comment(linker, "/export:AMDeviceCreateHouseArrestService=iTunesMobileDeviceReal.AMDeviceCreateHouseArrestService")
-            new MethodSig("AMDeviceCreateHouseArrestService", "int", "void* unknown1"),
+            new MethodSig("AMDeviceCreateHouseArrestService", "int", "void* unknown1", "void* unknown2"),
             //#pragma comment(linker, "/export:AMDeviceCreateWakeupToken=iTunesMobileDeviceReal.AMDeviceCreateWakeupToken")
             new MethodSig("AMDeviceCreateWakeupToken", "int", "void* device"),
             //#pragma comment(linker, "/export:AMDeviceDeactivate=iTunesMobileDeviceReal.AMDeviceDeactivate")
@@ -330,6 +333,7 @@ namespace GenerateStubs
             //#pragma comment(linker, "/export:AMDeviceGetTypeID=iTunesMobileDeviceReal.AMDeviceGetTypeID")
             //#pragma comment(linker, "/export:AMDeviceGetUserInfo=iTunesMobileDeviceReal.AMDeviceGetUserInfo")
             //#pragma comment(linker, "/export:AMDeviceGetWirelessBuddyFlags=iTunesMobileDeviceReal.AMDeviceGetWirelessBuddyFlags")
+            new MethodSig("AMDeviceGetWirelessBuddyFlags", "mach_error_t","void* device", "long* flags"),
             //#pragma comment(linker, "/export:AMDeviceInstallApplication=iTunesMobileDeviceReal.AMDeviceInstallApplication")
             //#pragma comment(linker, "/export:AMDeviceInstallProvisioningProfile=iTunesMobileDeviceReal.AMDeviceInstallProvisioningProfile")
             //#pragma comment(linker, "/export:AMDeviceIsPaired=iTunesMobileDeviceReal.AMDeviceIsPaired")
@@ -366,6 +370,7 @@ namespace GenerateStubs
             //#pragma comment(linker, "/export:AMDeviceSetUserInfo=iTunesMobileDeviceReal.AMDeviceSetUserInfo")
             //#pragma comment(linker, "/export:AMDeviceSetValue=iTunesMobileDeviceReal.AMDeviceSetValue")
             //#pragma comment(linker, "/export:AMDeviceSetWirelessBuddyFlags=iTunesMobileDeviceReal.AMDeviceSetWirelessBuddyFlags")
+            new MethodSig("AMDeviceSetWirelessBuddyFlags", "mach_error_t","void* device", "long flags"),
             //#pragma comment(linker, "/export:AMDeviceStartHouseArrestService=iTunesMobileDeviceReal.AMDeviceStartHouseArrestService")
             new MethodSig("AMDeviceStartHouseArrestService", "mach_error_t", "void* *device", "void* identifier", "void *unknown", "void* handle", "unsigned int *what"),
             //#pragma comment(linker, "/export:AMDeviceStartService=iTunesMobileDeviceReal.AMDeviceStartService")
