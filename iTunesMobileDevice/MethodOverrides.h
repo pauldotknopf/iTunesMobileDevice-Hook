@@ -159,6 +159,13 @@ extern "C" UINT32 __declspec(dllexport) AMDeviceGetInterfaceType(void* device)
 	return method_AMDeviceGetInterfaceType(device);
 
 }
+extern "C" mach_error_t __declspec(dllexport) AMDeviceGetWirelessBuddyFlags(void* device, long* flags)
+{
+	ENSURE_MOBILEDEVICE_LOADED;
+	OutputDebugStringA("AMDeviceGetWirelessBuddyFlags");
+	return method_AMDeviceGetWirelessBuddyFlags(device, flags);
+
+}
 extern "C" int __declspec(dllexport) AMDeviceIsPaired(void* device)
 {
 	ENSURE_MOBILEDEVICE_LOADED;
@@ -178,6 +185,13 @@ extern "C" mach_error_t __declspec(dllexport) AMDeviceNotificationSubscribe(void
 	ENSURE_MOBILEDEVICE_LOADED;
 	OutputDebugStringA("AMDeviceNotificationSubscribe");
 	return method_AMDeviceNotificationSubscribe(callback, unused1, unused2, unused3, am_device_notification_ptr);
+
+}
+extern "C" mach_error_t __declspec(dllexport) AMDeviceSetWirelessBuddyFlags(void* device, long flags)
+{
+	ENSURE_MOBILEDEVICE_LOADED;
+	OutputDebugStringA("AMDeviceSetWirelessBuddyFlags");
+	return method_AMDeviceSetWirelessBuddyFlags(device, flags);
 
 }
 extern "C" mach_error_t __declspec(dllexport) AMDeviceStartHouseArrestService(void* *device, void* identifier, void *unknown, void* handle, unsigned int *what)
@@ -1426,13 +1440,6 @@ extern "C" mach_error_t __declspec(dllexport) AMDeviceGetUserInfo()
 	return method_AMDeviceGetUserInfo();
 
 }
-extern "C" mach_error_t __declspec(dllexport) AMDeviceGetWirelessBuddyFlags()
-{
-	ENSURE_MOBILEDEVICE_LOADED;
-	OutputDebugStringA("AMDeviceGetWirelessBuddyFlags");
-	return method_AMDeviceGetWirelessBuddyFlags();
-
-}
 extern "C" mach_error_t __declspec(dllexport) AMDeviceInstallApplication()
 {
 	ENSURE_MOBILEDEVICE_LOADED;
@@ -1634,13 +1641,6 @@ extern "C" mach_error_t __declspec(dllexport) AMDeviceSetValue()
 	ENSURE_MOBILEDEVICE_LOADED;
 	OutputDebugStringA("AMDeviceSetValue");
 	return method_AMDeviceSetValue();
-
-}
-extern "C" mach_error_t __declspec(dllexport) AMDeviceSetWirelessBuddyFlags()
-{
-	ENSURE_MOBILEDEVICE_LOADED;
-	OutputDebugStringA("AMDeviceSetWirelessBuddyFlags");
-	return method_AMDeviceSetWirelessBuddyFlags();
 
 }
 extern "C" mach_error_t __declspec(dllexport) AMDeviceWakeupOperationCreateWithToken()
